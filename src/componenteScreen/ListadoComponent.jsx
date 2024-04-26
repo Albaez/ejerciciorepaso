@@ -5,22 +5,22 @@ const ListadoComponent = ({ onSelectItem }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    // Aquí puedes hacer la llamada a la API para obtener los datos del listado
-    // Puedes utilizar fetch o axios para hacer la petición
-    fetch('https://pokeapi.co/api/v2/pokemon/ditto')
+    fetch('https://pokeapi.co/api/v2/pokemon/?offset=20&limit=20')
       .then(response => response.json())
-      .then(responseData => setData(responseData));
+      .then(responseData => setData(responseData.results));
   }, []);
 
   return (
     <div>
       <h1>Listado de Pokémon</h1>
       <ul>
-        <li onClick={() => onSelectItem(data)}>
-          <Link to={`/detail/${data.name}`} state={{ selectedItem: data }}>
-            {data.name}
-          </Link>
-        </li>
+        {data.map(pokemon => (
+          <li key={pokemon.name} onClick={() => onSelectItem(pokemon)}>
+            <Link to={`/detail/${pokemon.name}`} state={{ selectedItem: pokemon }}>
+              {pokemon.name}
+            </Link>
+          </li>
+        ))}
       </ul>
     </div>
   );
